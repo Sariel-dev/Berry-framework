@@ -3,7 +3,7 @@
 [![FiveM](https://img.shields.io/badge/FiveM-FXServer_Cerulean-purple.svg)](https://fivem.net/)
 [![Lua](https://img.shields.io/badge/Lua-5.4-blue.svg)](https://www.lua.org/)
 [![Database](https://img.shields.io/badge/Database-oxmysql-orange.svg)](https://github.com/overextended/oxmysql)
-[![UI](https://img.shields.io/badge/UI-NUI_F1__Menu_%26_Volta__Notifications-purple.svg)]()
+[![UI](https://img.shields.io/badge/UI-NUI_F1__Menu_%26_Berry__Notifications-purple.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Performance](https://img.shields.io/badge/Performance-0.00ms_idle-brightgreen.svg)]()
 
@@ -18,7 +18,7 @@
 - [🚀 Guide d'Installation & Démarrage](#-guide-dinstallation--démarrage)
 - [⚙️ Configuration Globale (`config.lua`)](#️-configuration-globale-configlua)
 - [📚 Documentation API Complète (`Berry` & `Player`)](#-documentation-api-complète-berry--player)
-- [🎮 Menu F1 NUI & Notifications Volta-UI](#-menu-f1-nui--notifications-volta-ui)
+- [🎮 Menu F1 NUI & Notifications Berry UI](#-menu-f1-nui--notifications-berry-ui)
 - [📦 Spécifications des Sous-Systèmes Métier](#-spécifications-des-sous-systèmes-métier)
 - [🛠️ TUTORIELS & GUIDES D'ADAPTATION (Comment tout modifier)](#️-tutoriels--guides-dadaptation-comment-tout-modifier)
   - [Tuto 1 : Modifier le thème & les couleurs du Menu F1](#tuto-1--modifier-le-thème--les-couleurs-du-menu-f1)
@@ -26,7 +26,7 @@
   - [Tuto 3 : Créer un nouveau métier avec grades et salaires](#tuto-3--créer-un-nouveau-métier-avec-grades-et-salaires)
   - [Tuto 4 : Brancher un nouvel inventaire dans le framework](#tuto-4--brancher-un-nouvel-inventaire-dans-le-framework)
   - [Tuto 5 : Créer une commande administrative personnalisée](#tuto-5--créer-une-commande-administrative-personnalisée)
-  - [Tuto 6 : Déclencher des notifications Volta-UI](#tuto-6--déclencher-des-notifications-volta-ui)
+  - [Tuto 6 : Déclencher des notifications Berry UI](#tuto-6--déclencher-des-notifications-berry-ui)
 - [📊 Référence du Schéma Base de Données (`berry_*`)](#-référence-du-schéma-base-de-données-berry_)
 - [🧪 Tests Unitaires & DevTools](#-tests-unitaires--devtools)
 - [📄 Licence](#-licence)
@@ -79,7 +79,7 @@ berry_framework/
 │   │   ├── bridges.lua              # Pont d'émulation ESX
 │   │   └── bootstrap.lua            # Démarrage et thread d'auto-sauvegarde
 │   ├── client/                      # Logique client
-│   │   ├── utilities.lua            # Notifications Volta-UI & helpers Vector3
+│   │   ├── utilities.lua            # Notifications Berry UI & helpers Vector3
 │   │   ├── event_manager.lua        # Événements client
 │   │   ├── callback_manager.lua     # Callbacks client
 │   │   ├── player_manager.lua       # Cache local des données joueur
@@ -88,7 +88,7 @@ berry_framework/
 │   │   ├── vehicles.lua             # Menu véhicules possédés
 │   │   ├── f1menu.lua               # Logique Menu F1 Lua
 │   │   └── bootstrap.lua
-│   └── ui/                          # Master NUI Frame (F1 Menu + Volta UI)
+│   └── ui/                          # Master NUI Frame (F1 Menu + Berry UI)
 │       ├── index.html               # Cadre HTML unique
 │       ├── style.css                # Style Violet Berry & Notifications
 │       └── app.js                   # Moteurs NUI F1 & Notifications
@@ -224,9 +224,9 @@ player:Save()                         -- Effectue l'UPDATE SQL ciblé
 
 ---
 
-## 🎮 Menu F1 NUI & Notifications Volta-UI
+## 🎮 Menu F1 NUI & Notifications Berry UI
 
-### Menu F1 NUI (Design Flashback / Zeno)
+### 💜 Menu F1 NUI (Design Flashback / Zeno)
 Le Menu F1 de Berry est intégré dans [berry-core/ui/style.css](file:///c:/Users/Sariel/Desktop/berry_framework/berry-core/ui/style.css) et [berry-core/client/f1menu.lua](file:///c:/Users/Sariel/Desktop/berry_framework/berry-core/client/f1menu.lua) :
 
 - **Raccourci** : Touche **`F1`** (Personnalisable dans les options GTA V).
@@ -234,7 +234,7 @@ Le Menu F1 de Berry est intégré dans [berry-core/ui/style.css](file:///c:/User
 - **Souris** : Support complet du survol et des clics.
 - **Thème** : Violet Berry (`#4c1d95` en en-tête, `#6b21a8` sur l'élément sélectionné).
 
-### Notifications Volta-UI
+### 🔔 Notifications Berry UI
 Intégrées en haut à droite avec barres de décompte animées :
 ```lua
 -- Déclencher une notification
@@ -251,13 +251,13 @@ Ouvrez le fichier [berry-core/ui/style.css](file:///c:/Users/Sariel/Desktop/berr
 - **Changer la couleur de l'en-tête** (Ligne ~35) :
   ```css
   .menu-header {
-      background: linear-gradient(180deg, #4c1d95 0%, #1e1b4b 100%); /* Modifiez ces codes HEX */
+      background: linear-gradient(180deg, #4c1d95 0%, #1e1b4b 100%);
   }
   ```
 - **Changer la couleur du bouton sélectionné** (Ligne ~120) :
   ```css
   .menu-item.active {
-      background: linear-gradient(90deg, #6b21a8 0%, #3b0764 100%); /* Modifiez la couleur active */
+      background: linear-gradient(90deg, #6b21a8 0%, #3b0764 100%);
       border: 1px solid rgba(192, 132, 252, 0.4);
   }
   ```
@@ -324,7 +324,7 @@ end
 ---
 
 ### Tuto 4 : Brancher un nouvel inventaire dans le framework
-Pour lier un nouvel inventaire (ex: `ox_inventory`, `qs-inventory` ou autre) au framework Berry :
+Pour lier un nouvel inventaire au framework Berry :
 
 1. Déclarez votre ressource d'inventaire dans `server.cfg` **avant ou après** `berry-core` selon sa documentation.
 2. Si votre inventaire utilise les fonctions ESX (`esx:getSharedObject` ou `ESX.GetPlayerFromId`), le module [berry-core/server/bridges.lua](file:///c:/Users/Sariel/Desktop/berry_framework/berry-core/server/bridges.lua) fait le lien automatiquement.
@@ -342,7 +342,6 @@ Ouvrez [berry-core/server/admin.lua](file:///c:/Users/Sariel/Desktop/berry_frame
 ```lua
 -- Commande /setgroup [id] [rôle]
 RegisterCommand("setgroup", function(source, args)
-    -- Vérification de la permission autoritaire (administrator ou superadmin)
     if source > 0 and not Berry.Permissions.Has(source, "superadmin") then
         return TriggerClientEvent("berry:notify", source, "Permission refusée.", "error")
     end
@@ -361,7 +360,7 @@ end, false)
 
 ---
 
-### Tuto 6 : Déclencher des notifications Volta-UI
+### Tuto 6 : Déclencher des notifications Berry UI
 Le système de notification prend en charge tous les formats de message.
 
 #### Côté Serveur (Envoyer à un joueur) :
