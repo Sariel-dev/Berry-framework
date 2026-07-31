@@ -175,8 +175,9 @@ function renderItems() {
         labelSpan.innerText = item.label;
         div.appendChild(labelSpan);
 
-        if (item.value !== undefined) {
-            const valSpan = document.className = 'menu-item-value';
+        if (item.value !== undefined && item.value !== null) {
+            const valSpan = document.createElement('span');
+            valSpan.className = 'menu-item-value';
             valSpan.innerText = item.value;
             div.appendChild(valSpan);
         }

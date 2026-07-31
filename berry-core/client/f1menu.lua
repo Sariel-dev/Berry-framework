@@ -15,6 +15,7 @@ local function CloseNuiMenu()
     currentMenuStack = {}
     currentMenuItems = {}
     SetNuiFocus(false, false)
+    SetNuiFocusKeepInput(false)
     SendNUIMessage({ action = "close" })
 end
 
@@ -196,8 +197,8 @@ OpenSubMenu = function(menuKey)
             { label = "Liste des Joueurs Connectés", action = "admin_players" },
             { label = "Statistiques CPU & RAM Serveur", action = "admin_stats" }
         }
-        table.insert(currentMenuStack, { title = "ADMINISTRATION", subtitle = "Menu Modération", items = items })
-        OpenNuiMenu("ADMINISTRATION", "Menu Modération", items)
+        table.insert(currentMenuStack, { title = "ADMINISTRATION", subtitle = "Menu Staff", items = items })
+        OpenNuiMenu("ADMINISTRATION", "Menu Staff", items)
     end
 end
 
@@ -213,8 +214,9 @@ ShowMainMenu = function()
     }
 
     local pData = Berry.GetPlayerData() or {}
-    if pData.permission == "admin" or pData.permission == "superadmin" then
-        table.insert(mainItems, { label = "Menu Modération / Admin", type = "submenu", menuKey = "admin" })
+    local group = tostring(pData.group or pData.permission or "citoyen"):lower()
+    if group == "fondateur" or group == "co_fondateur" or group == "administrateur" or group == "moderateur" or group == "helper" or group == "admin" or group == "superadmin" or group == "owner" then
+        table.insert(mainItems, { label = "Menu Staff & Modération", type = "submenu", menuKey = "admin" })
     end
 
     table.insert(currentMenuStack, { title = "BERRY", subtitle = "Menu Principal", items = mainItems })
