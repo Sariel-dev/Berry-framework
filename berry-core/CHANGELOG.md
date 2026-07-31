@@ -6,6 +6,7 @@ Toutes les modifications notables apportées au **Berry Framework** sont documen
 
 ### Nouveautés & Ajouts
 
+- **Moteur Discord Rich Presence (`berry-core/client/rich_presence.lua` & `berry-core/shared/config.lua`)** : Système de présence Discord dynamique affichant le nom du personnage, l'ID serveur, le métier, l'icône personnalisée, le nom du serveur et un bouton de redirection Discord.
 - **Moteur de Logs Discord Webhooks (`berry-core/server/discord_logger.lua`)** : Système complet de journalisation vers Discord avec cartes Embeds stylisées (couleurs par catégorie, date/heure, licence, ID Discord, exécuteur et cible). Automatiquement connecté à l'Anti-Cheat, au changement de rang `/setgroup`, aux commandes Staff, à l'économie, aux connexions/déconnexions et aux achats immobiliers.
 - **Hiérarchie des Rôles Admin & Commande `/setgroup` (`berry-core/server/permission_manager.lua`)** : Configuration de la hiérarchie des permissions avec les rôles français natifs : `fondateur` (Niveau 5), `co_fondateur` (Niveau 4), `administrateur` (Niveau 3), `moderateur` (Niveau 2), `helper` (Niveau 1) et `citoyen` (Niveau 0). Commande `/setgroup [ID] [GROUPE]` autoritaire.
 - **Moteur de Menu Contexte Clic Droit / ALT (`berry-core/contextmenu/`)** : Intégration complète du **ContextMenu** synchronisé avec `berry-core`. Interactions contextuelles 3D sur joueurs (Fouiller, Menotter, Escorter, Mettre/Sortir du véhicule, Réanimer) et véhicules (Verrouiller, Moteur, Coffre inventaire, Capot, Démarrage aux câbles, Supprimer).

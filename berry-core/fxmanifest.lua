@@ -5,7 +5,7 @@ use_experimental_fxv2_oal 'yes'
 
 name 'berry-core'
 author 'Berry Framework Team'
-description 'Single-Resource Core Kernel, Master Berry UI, AntiCheat, Discord Logger, ContextMenu V6, Emote Engine, Housing Engine, F1 NUI Menu & berry-inventory Engine'
+description 'Single-Resource Core Kernel, Master Berry UI, AntiCheat, Discord RPC & Logger, ContextMenu V6, Emote Engine, Housing Engine, F1 NUI Menu & berry-inventory Engine'
 version '1.0.0'
 
 ui_page 'ui/index.html'
@@ -72,6 +72,7 @@ client_scripts {
     'client/police_ems.lua',
     'client/interim.lua',
     'client/density.lua',
+    'client/rich_presence.lua',
     'client/f1menu.lua',
     'client/markers.lua',
     'client/minigames.lua',
@@ -116,6 +117,7 @@ files {
     'ui/index.html',
     'ui/style.css',
     'ui/app.js',
+    'ui/preview.html',
     'contextmenu/html/style.css',
     'contextmenu/html/script.js',
     'contextmenu/html/fonts/Inter.ttf',

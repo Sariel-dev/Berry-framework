@@ -35,6 +35,21 @@ BerryConfig.Security = {
     LogViolations = true
 }
 
+BerryConfig.DiscordRichPresence = {
+    Enabled = true,
+    AppId = "1234567890123456789", -- Remplacez par l'ID de votre application Discord Developer Portal
+    AssetLogo = "berry_logo",       -- Nom de la grande image téléchargée sur Discord Developer Portal
+    AssetLogoText = "Berry Framework RP",
+    AssetSmall = "player_icon",     -- Nom de la petite icône
+    AssetSmallText = "En Jeu",
+    UpdateIntervalMs = 15000,       -- Mise à jour toutes les 15 secondes
+    ShowPlayerCount = true,
+    ShowPlayerName = true,
+    Buttons = {
+        { label = "Rejoindre le Discord", url = "https://discord.gg/berry" }
+    }
+}
+
 BerryConfig.DiscordWebhooks = {
     Enabled = true,
     ServerName = "Berry Roleplay",
