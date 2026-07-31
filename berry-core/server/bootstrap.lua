@@ -71,9 +71,36 @@ CreateThread(function()
     TriggerEvent("berry:coreReady")
 end)
 
+-- Beautiful Colored Console Connection Logger
+AddEventHandler("playerConnecting", function(playerName, setKickReason, deferrals)
+    local src = source
+    local maxClients = GetConvarInt("sv_maxclients", 32)
+    local currentCount = #GetPlayers()
+    local identifier = GetPlayerIdentifierByType and GetPlayerIdentifierByType(src, "license") or GetPlayerIdentifier(src, 0) or "N/A"
+
+    print(string.format("^6[BERRY] ^2[+ CONNEXION] ^7Joueur: ^3%s ^7| ^5ID: [%d] ^7| ^4Licence: [%s] ^7| ^2Joueurs: [%d/%d]^7",
+        tostring(playerName or "Inconnu"),
+        src,
+        tostring(identifier),
+        currentCount + 1,
+        maxClients
+    ))
+end)
+
 AddEventHandler("playerDropped", function(reason)
     local src = source
-    Berry.Logger.Info("CORE", "Player dropped (Source: %d, Reason: %s)", src, tostring(reason))
+    local playerName = GetPlayerName(src) or "Inconnu"
+    local maxClients = GetConvarInt("sv_maxclients", 32)
+    local currentCount = math.max(0, #GetPlayers() - 1)
+
+    print(string.format("^6[BERRY] ^1[- DÉCONNEXION] ^7Joueur: ^3%s ^7| ^5ID: [%d] ^7| ^1Raison: [%s] ^7| ^3Joueurs: [%d/%d]^7",
+        tostring(playerName),
+        src,
+        tostring(reason or "Déconnexion normale"),
+        currentCount,
+        maxClients
+    ))
+
     Berry.UnregisterPlayer(src)
 end)
 
