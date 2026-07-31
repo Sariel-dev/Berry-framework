@@ -29,18 +29,14 @@ ox_libs {
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
-    'server/core.lua',
-    'server/security.lua',
-    'server/gameplay.lua',
+    'server/sv.lua',
     'inventory/init.lua',
     'inventory/modules/craftmanager/server.lua',
     'inventory/server/medic.lua'
 }
 
 client_scripts {
-    'client/core.lua',
-    'client/gameplay.lua',
-    'client/ui_anticheat.lua',
+    'client/cl.lua',
 
     -- Context Menu Scripts
     'contextmenu/Utils/screenToWorld.lua',
