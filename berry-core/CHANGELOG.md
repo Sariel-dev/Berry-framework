@@ -1,11 +1,12 @@
 # Journal des Modifications — Berry Framework
 
-Toutes les modifications notables apportées au **Berry Framework** sont documentées dans ce fichier.
+Toutes les modifications notables apportées au **Berry Framework** sont documentées dans me fichier.
 
 ## [1.0.0] - 2026-07-31
 
 ### Nouveautés & Ajouts
 
+- **Protection Anti-Désactivation du Core (`berry-core/client/anticheat.lua` & `berry-core/server/anticheat.lua`)** : Système de surveillance par battement de cœur (Heartbeat) de 4s et écouteur d'arrêt de ressource (`onResourceStop`). Si un mod menu tente d'arrêter, geler ou désactiver le script client `berry-core`, le serveur détecte l'absence de battement de cœur (> 15s) et applique un **bannissement automatique instantané** avec journalisation Discord Webhook.
 - **Moteur Discord Rich Presence (`berry-core/client/rich_presence.lua` & `berry-core/shared/config.lua`)** : Système de présence Discord dynamique affichant le nom du personnage, l'ID serveur, le métier, l'icône personnalisée, le nom du serveur et un bouton de redirection Discord.
 - **Moteur de Logs Discord Webhooks (`berry-core/server/discord_logger.lua`)** : Système complet de journalisation vers Discord avec cartes Embeds stylisées (couleurs par catégorie, date/heure, licence, ID Discord, exécuteur et cible). Automatiquement connecté à l'Anti-Cheat, au changement de rang `/setgroup`, aux commandes Staff, à l'économie, aux connexions/déconnexions et aux achats immobiliers.
 - **Hiérarchie des Rôles Admin & Commande `/setgroup` (`berry-core/server/permission_manager.lua`)** : Configuration de la hiérarchie des permissions avec les rôles français natifs : `fondateur` (Niveau 5), `co_fondateur` (Niveau 4), `administrateur` (Niveau 3), `moderateur` (Niveau 2), `helper` (Niveau 1) et `citoyen` (Niveau 0). Commande `/setgroup [ID] [GROUPE]` autoritaire.

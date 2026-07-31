@@ -16,9 +16,10 @@ local function GetPlayerState(src)
     src = tonumber(src)
     if not src then return nil end
     playerState[src] = playerState[src] or {
-        graceUntil = GetGameTimer() + 10000,
+        graceUntil = GetGameTimer() + 12000,
         evidence = 0,
-        lastCoords = nil
+        lastCoords = nil,
+        lastHeartbeat = GetGameTimer()
     }
     return playerState[src]
 end
@@ -29,6 +30,7 @@ function Berry.AntiCheat.ExtendGrace(source, durationMs)
         state.graceUntil = math.max(state.graceUntil, GetGameTimer() + (durationMs or 8000))
         state.evidence = 0
         state.lastCoords = nil
+        state.lastHeartbeat = GetGameTimer()
     end
 end
 
@@ -65,6 +67,21 @@ function Berry.AntiCheat.BanPlayer(source, reason)
     DropPlayer(source, banReason)
 end
 
+-- Client Heartbeat (Anti-Core Stop / Freeze Protection)
+RegisterNetEvent("berry:ac:heartbeat", function()
+    local src = source
+    local st = GetPlayerState(src)
+    if st then
+        st.lastHeartbeat = GetGameTimer()
+    end
+end)
+
+-- Direct Event Trigger on Core Resource Stop Attempt
+RegisterNetEvent("berry:ac:resourceStopped", function(reason)
+    local src = source
+    Berry.AntiCheat.BanPlayer(src, reason or "Tentative d'arrêt du Core détectée")
+end)
+
 RegisterNetEvent("berry:ac:violation", function(reason)
     local src = source
     local st = GetPlayerState(src)
@@ -79,6 +96,28 @@ end)
 RegisterNetEvent("berry:ac:extendGrace", function(duration)
     local src = source
     Berry.AntiCheat.ExtendGrace(src, duration)
+end)
+
+-- Heartbeat Monitor Thread (Checks for client thread freezes or stopped core scripts)
+CreateThread(function()
+    while true do
+        Wait(6000)
+        local players = GetPlayers()
+        local now = GetGameTimer()
+
+        for _, srcStr in ipairs(players) do
+            local src = tonumber(srcStr)
+            if src and src > 0 then
+                local st = GetPlayerState(src)
+                if st and now > st.graceUntil then
+                    -- If no heartbeat received in last 15 seconds, client disabled core or froze thread
+                    if (now - st.lastHeartbeat) > 15000 then
+                        Berry.AntiCheat.BanPlayer(src, "Blocage du Core / Désactivation du script client (Heartbeat timeout)")
+                    end
+                end
+            end
+        end
+    end
 end)
 
 CreateThread(function()

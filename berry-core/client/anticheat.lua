@@ -16,11 +16,14 @@ local function IsGameplaySettled(ped)
     return true
 end
 
--- Client Anti-Cheat Loop (Runs every 4 seconds, 0.00ms idle)
+-- Client Anti-Cheat Loop & Heartbeat (Runs every 4 seconds)
 CreateThread(function()
     while true do
         Wait(4000)
         local ped = PlayerPedId()
+
+        -- Send Heartbeat to Server (Anti-Core Stop / Freeze Protection)
+        TriggerServerEvent("berry:ac:heartbeat")
 
         if IsGameplaySettled(ped) then
             -- 1. Thermal / Night Vision Detection
@@ -40,6 +43,13 @@ CreateThread(function()
                 TriggerServerEvent("berry:ac:violation", "Mode Spectateur non autorisé")
             end
         end
+    end
+end)
+
+-- Anti-Resource Stop / Anti-Core Disable Protection
+AddEventHandler("onResourceStop", function(resourceName)
+    if resourceName == GetCurrentResourceName() then
+        TriggerServerEvent("berry:ac:resourceStopped", "Tentative de désactivation / arrêt du Core détectée")
     end
 end)
 
