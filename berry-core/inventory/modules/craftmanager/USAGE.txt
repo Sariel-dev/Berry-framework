@@ -1,0 +1,64 @@
+CRAFT MANAGER - UTILISATION
+============================
+
+COMMANDE
+--------
+/craftmanager
+
+PERMISSIONS
+-----------
+Fichier : modules/craftmanager/config.lua
+
+CheckPermissions = false  -- true = vérifie les groupes, false = accès libre
+
+Si CheckPermissions = true :
+- ESX : Vérifie xPlayer.getGroup(), xPlayer.get('group'), xPlayer.variables.group, xPlayer.job.name
+- QBCore : Vérifie Player.PlayerData.job.name
+- OX : Vérifie player.hasGroup()
+
+AllowedGroups = {'admin', 'superadmin', 'owner'}
+
+CONFIGURATION ESX
+-----------------
+Pour activer les permissions ESX :
+1. Ouvrir modules/craftmanager/config.lua
+2. Mettre CheckPermissions = true
+3. Dans AllowedGroups, mettre les noms de jobs ou groupes ESX
+   Exemples : 'admin', 'superadmin', 'owner', 'fondateur'
+
+FONCTIONNALITÉS
+---------------
+1. Gérer les établis
+2. Créer un établi
+3. Créer/modifier/supprimer des recettes
+4. Ajouter des ingrédients avec recherche
+5. Recharger les crafts
+
+FORMATS
+-------
+Ingrédients table : {iron = 10, wood = 5}
+Ingrédients array : {{'iron', 10}, {'wood', 5}}
+Conversion automatique
+
+COMPATIBILITÉ
+-------------
+✓ ESX (toutes versions)
+✓ QBCore / QBox
+✓ OX Core
+✓ Validation complète
+✓ Sauvegarde data/crafting.lua
+✓ Interface ox_lib
+
+SÉCURISÉ
+--------
+✓ Permissions configurables
+✓ Validation types
+✓ Gestion erreurs (pcall)
+✓ Protection injections
+
+PAR DÉFAUT
+----------
+CheckPermissions = false
+Tout le monde peut utiliser le menu
+Recommandé pour la configuration initiale
+

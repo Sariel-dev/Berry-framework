@@ -1,0 +1,342 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@400;600;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    user-select: none;
+}
+
+body {
+    background: transparent !important;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+   BERRY PROGRESS BAR SYSTEM (Bottom-Center)
+   ========================================================================== */
+#berry-progressbar-container {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9998;
+    pointer-events: none;
+}
+
+.progressbar-wrapper {
+    width: 380px;
+    background: rgba(15, 13, 22, 0.92);
+    backdrop-filter: blur(14px);
+    border-radius: 10px;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.progressbar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#progressbar-label {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+#progressbar-percentage {
+    color: #c084fc;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.progressbar-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+#progressbar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #a855f7, #6b21a8);
+    border-radius: 4px;
+    transition: width 0.1s linear;
+}
+
+/* ==========================================================================
+   BERRY NOTIFICATION SYSTEM (Top Right)
+   ========================================================================== */
+#berry-notifications-container {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 10000;
+    pointer-events: none;
+}
+
+.berry-notification {
+    pointer-events: auto;
+    min-width: 320px;
+    max-width: 420px;
+    background: rgba(15, 13, 22, 0.92);
+    backdrop-filter: blur(16px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    position: relative;
+    overflow: hidden;
+    animation: berrySlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.berry-notification.exiting {
+    animation: berrySlideOut 0.3s cubic-bezier(0.7, 0, 0.84, 0) forwards;
+}
+
+.berry-notification-content-wrapper {
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.berry-notification-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.berry-notification-title {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.berry-notification-subtitle {
+    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.berry-notification-message {
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+/* Variants (Success, Error, Warning, Inform) */
+.berry-notification.variant-success {
+    border-left: 4px solid #22c55e;
+}
+.berry-notification.variant-success .berry-notification-title {
+    color: #4ade80;
+}
+
+.berry-notification.variant-error {
+    border-left: 4px solid #ef4444;
+}
+.berry-notification.variant-error .berry-notification-title {
+    color: #f87171;
+}
+
+.berry-notification.variant-warning {
+    border-left: 4px solid #f59e0b;
+}
+.berry-notification.variant-warning .berry-notification-title {
+    color: #fbbf24;
+}
+
+.berry-notification.variant-info,
+.berry-notification.variant-inform {
+    border-left: 4px solid #c084fc;
+}
+.berry-notification.variant-info .berry-notification-title,
+.berry-notification.variant-inform .berry-notification-title {
+    color: #c084fc;
+}
+
+/* Progress Countdown Bar */
+.berry-notification-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.berry-notification.variant-success .berry-notification-progress { background: #22c55e; }
+.berry-notification.variant-error .berry-notification-progress { background: #ef4444; }
+.berry-notification.variant-warning .berry-notification-progress { background: #f59e0b; }
+.berry-notification.variant-info .berry-notification-progress,
+.berry-notification.variant-inform .berry-notification-progress { background: #c084fc; }
+
+@keyframes berrySlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes berrySlideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(60px);
+    }
+}
+
+/* ==========================================================================
+   F1 MENU SYSTEM (Berry Violet Theme)
+   ========================================================================== */
+#f1-container {
+    position: absolute;
+    top: 60px;
+    left: 60px;
+    width: 360px;
+    display: flex;
+    flex-direction: column;
+    z-index: 9999;
+    filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.7));
+}
+
+.menu-header {
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(180deg, #4c1d95 0%, #1e1b4b 100%);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #c084fc, #7e22ce);
+}
+
+.menu-header h1 {
+    color: #ffffff;
+    font-size: 34px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+}
+
+.menu-subtitle-bar {
+    width: 100%;
+    height: 36px;
+    background: rgba(15, 12, 24, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+#menu-subtitle {
+    color: #c084fc;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+#menu-counter {
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.menu-items-container {
+    width: 100%;
+    background: rgba(13, 11, 20, 0.93);
+    backdrop-filter: blur(14px);
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-top: none;
+}
+
+.menu-item {
+    width: 100%;
+    height: 44px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    color: #cbd5e1;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.12s ease;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.menu-item.active {
+    background: linear-gradient(90deg, #6b21a8 0%, #3b0764 100%);
+    color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(107, 33, 168, 0.5);
+    border: 1px solid rgba(192, 132, 252, 0.4);
+}
+
+.menu-item-value {
+    font-size: 13px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.menu-item.active .menu-item-value {
+    color: #f3e8ff;
+}
