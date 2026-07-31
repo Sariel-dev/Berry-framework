@@ -226,7 +226,7 @@ player:Save()                         -- Effectue l'UPDATE SQL ciblé
 
 ## 🎮 Menu F1 NUI & Notifications Berry UI
 
-### 💜 Menu F1 NUI (Design Flashback / Zeno)
+### 💜 Menu F1 NUI 
 Le Menu F1 de Berry est intégré dans [berry-core/ui/style.css](file:///c:/Users/Sariel/Desktop/berry_framework/berry-core/ui/style.css) et [berry-core/client/f1menu.lua](file:///c:/Users/Sariel/Desktop/berry_framework/berry-core/client/f1menu.lua) :
 
 - **Raccourci** : Touche **`F1`** (Personnalisable dans les options GTA V).
