@@ -170,7 +170,7 @@ function renderItems() {
     currentItems.forEach((item, idx) => {
         const div = document.createElement('div');
         div.className = `menu-item ${idx === currentIndex ? 'active' : ''}`;
-        
+
         const labelSpan = document.createElement('span');
         labelSpan.innerText = item.label;
         div.appendChild(labelSpan);
