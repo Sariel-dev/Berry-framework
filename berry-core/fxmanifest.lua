@@ -29,54 +29,18 @@ ox_libs {
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
-    'server/logger.lua',
-    'server/discord_logger.lua',
-    'server/database_manager.lua',
-    'server/cache_manager.lua',
-    'server/security_manager.lua',
-    'server/permission_manager.lua',
-    'server/anticheat.lua',
-    'server/event_manager.lua',
-    'server/callback_manager.lua',
-    'server/player_manager.lua',
-    'server/state_manager.lua',
-    'server/module_manager.lua',
-    'server/characters.lua',
-    'server/economy.lua',
-    'server/jobs.lua',
-    'server/organizations.lua',
-    'server/vehicles.lua',
-    'server/properties.lua',
-    'server/police_ems.lua',
-    'server/interim.lua',
-    'server/admin.lua',
-    'server/devtools.lua',
-    'server/bridges.lua',
+    'server/core.lua',
+    'server/security.lua',
+    'server/gameplay.lua',
     'inventory/init.lua',
     'inventory/modules/craftmanager/server.lua',
-    'inventory/server/medic.lua',
-    'server/bootstrap.lua'
+    'inventory/server/medic.lua'
 }
 
 client_scripts {
-    'client/utilities.lua',
-    'client/event_manager.lua',
-    'client/callback_manager.lua',
-    'client/player_manager.lua',
-    'client/state_manager.lua',
-    'client/characters.lua',
-    'client/vehicles.lua',
-    'client/vehicle_realism.lua',
-    'client/emotes.lua',
-    'client/properties.lua',
-    'client/police_ems.lua',
-    'client/interim.lua',
-    'client/density.lua',
-    'client/rich_presence.lua',
-    'client/f1menu.lua',
-    'client/markers.lua',
-    'client/minigames.lua',
-    'client/anticheat.lua',
+    'client/core.lua',
+    'client/gameplay.lua',
+    'client/ui_anticheat.lua',
 
     -- Context Menu Scripts
     'contextmenu/Utils/screenToWorld.lua',
@@ -109,8 +73,7 @@ client_scripts {
     'contextmenu/example/player.lua',
     'contextmenu/example/vehicle.lua',
 
-    'inventory/init.lua',
-    'client/bootstrap.lua'
+    'inventory/init.lua'
 }
 
 files {

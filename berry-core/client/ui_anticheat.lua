@@ -1,5 +1,19 @@
-local Berry = exports["berry-core"]:GetCoreObject()
+-- ============================================================================
+-- Berry Framework — Client UI (F1 Menu), AntiCheat & Lifecycle Bootstrap
+-- ============================================================================
 
+Berry = Berry or {}
+
+-- Enable Lua 5.4 Generational GC on client
+if collectgarbage then
+    pcall(function()
+        collectgarbage("generational")
+    end)
+end
+
+-- ----------------------------------------------------------------------------
+-- 1. F1 Master NUI Menu Engine
+-- ----------------------------------------------------------------------------
 local isMenuOpen = false
 local currentMenuStack = {}
 local currentMenuItems = {}
@@ -34,7 +48,6 @@ local function OpenNuiMenu(title, subtitle, items)
     })
 end
 
--- Submenu Router
 local ShowMainMenu, OpenSubMenu
 
 OpenSubMenu = function(menuKey)
@@ -124,32 +137,40 @@ OpenSubMenu = function(menuKey)
 
     elseif menuKey == "emotes_dances" then
         local items = {}
-        for idx, item in ipairs(Berry.Emotes.Categories.dances) do
-            table.insert(items, { label = item.label, action = "play_dance_" .. idx })
+        if Berry.Emotes and Berry.Emotes.Categories then
+            for idx, item in ipairs(Berry.Emotes.Categories.dances) do
+                table.insert(items, { label = item.label, action = "play_dance_" .. idx })
+            end
         end
         table.insert(currentMenuStack, { title = "DANSES", subtitle = "Fête & Nuit", items = items })
         OpenNuiMenu("DANSES", "Fête & Nuit", items)
 
     elseif menuKey == "emotes_gestures" then
         local items = {}
-        for idx, item in ipairs(Berry.Emotes.Categories.gestures) do
-            table.insert(items, { label = item.label, action = "play_gesture_" .. idx })
+        if Berry.Emotes and Berry.Emotes.Categories then
+            for idx, item in ipairs(Berry.Emotes.Categories.gestures) do
+                table.insert(items, { label = item.label, action = "play_gesture_" .. idx })
+            end
         end
         table.insert(currentMenuStack, { title = "GESTES", subtitle = "Gangs & Saluts", items = items })
         OpenNuiMenu("GESTES", "Gangs & Saluts", items)
 
     elseif menuKey == "emotes_sitting" then
         local items = {}
-        for idx, item in ipairs(Berry.Emotes.Categories.sitting) do
-            table.insert(items, { label = item.label, action = "play_sit_" .. idx })
+        if Berry.Emotes and Berry.Emotes.Categories then
+            for idx, item in ipairs(Berry.Emotes.Categories.sitting) do
+                table.insert(items, { label = item.label, action = "play_sit_" .. idx })
+            end
         end
         table.insert(currentMenuStack, { title = "POSITIONS", subtitle = "Assis & Allongé", items = items })
         OpenNuiMenu("POSITIONS", "Assis & Allongé", items)
 
     elseif menuKey == "emotes_props" then
         local items = {}
-        for idx, item in ipairs(Berry.Emotes.Categories.props) do
-            table.insert(items, { label = item.label, action = "play_prop_" .. idx })
+        if Berry.Emotes and Berry.Emotes.Categories then
+            for idx, item in ipairs(Berry.Emotes.Categories.props) do
+                table.insert(items, { label = item.label, action = "play_prop_" .. idx })
+            end
         end
         table.insert(currentMenuStack, { title = "OBJETS", subtitle = "Boissons & Repas", items = items })
         OpenNuiMenu("OBJETS", "Boissons & Repas", items)
@@ -223,14 +244,12 @@ ShowMainMenu = function()
     OpenNuiMenu("BERRY", "Menu Principal", mainItems)
 end
 
--- Synchronized Close Listener
 RegisterNetEvent("berry:ui:closeAll", function(exceptSource)
     if exceptSource ~= "f1menu" then
         CloseNuiMenu()
     end
 end)
 
--- NUI Callbacks
 RegisterNUICallback("selectItem", function(data, cb)
     local idx = data.index + 1
     local item = currentMenuItems[idx]
@@ -243,27 +262,25 @@ RegisterNUICallback("selectItem", function(data, cb)
     elseif item.action then
         local ped = PlayerPedId()
 
-        -- Dynamic Emote Actions
         if string.find(item.action, "play_dance_") then
             local id = tonumber(string.sub(item.action, 12))
-            local e = Berry.Emotes.Categories.dances[id]
+            local e = Berry.Emotes and Berry.Emotes.Categories and Berry.Emotes.Categories.dances[id]
             if e then Berry.Emotes.Play(e.dict, e.anim) end
         elseif string.find(item.action, "play_gesture_") then
             local id = tonumber(string.sub(item.action, 14))
-            local e = Berry.Emotes.Categories.gestures[id]
+            local e = Berry.Emotes and Berry.Emotes.Categories and Berry.Emotes.Categories.gestures[id]
             if e then Berry.Emotes.Play(e.dict, e.anim) end
         elseif string.find(item.action, "play_sit_") then
             local id = tonumber(string.sub(item.action, 10))
-            local e = Berry.Emotes.Categories.sitting[id]
+            local e = Berry.Emotes and Berry.Emotes.Categories and Berry.Emotes.Categories.sitting[id]
             if e then Berry.Emotes.Play(e.dict, e.anim) end
         elseif string.find(item.action, "play_prop_") then
             local id = tonumber(string.sub(item.action, 11))
-            local e = Berry.Emotes.Categories.props[id]
+            local e = Berry.Emotes and Berry.Emotes.Categories and Berry.Emotes.Categories.props[id]
             if e then Berry.Emotes.Play(e.dict, e.anim, e.prop, e.bone, e.pos, e.rot) end
         elseif item.action == "emote_cancel" then
-            Berry.Emotes.Stop()
+            if Berry.Emotes then Berry.Emotes.Stop() end
 
-        -- Vehicle Actions
         elseif item.action == "veh_engine" then
             local veh = GetVehiclePedIsIn(ped, false)
             if veh ~= 0 then
@@ -289,7 +306,6 @@ RegisterNUICallback("selectItem", function(data, cb)
         elseif item.action == "limiter_130" then local veh = GetVehiclePedIsIn(ped, false) if veh ~= 0 then SetVehicleMaxSpeed(veh, 130.0 / 3.6) Berry.ClientUtils.ShowNotification("Limiteur à 130 km/h.", "info") end
         elseif item.action == "limiter_off" then local veh = GetVehiclePedIsIn(ped, false) if veh ~= 0 then SetVehicleMaxSpeed(veh, 0.0) Berry.ClientUtils.ShowNotification("Limiteur désactivé.", "info") end
 
-        -- Walks
         elseif item.action == "walk_normal" then ResetPedMovementClipset(ped, 0.2)
         elseif item.action == "walk_brave" then RequestAnimSet("move_m@brave") while not HasAnimSetLoaded("move_m@brave") do Wait(10) end SetPedMovementClipset(ped, "move_m@brave", 0.2)
         elseif item.action == "walk_confident" then RequestAnimSet("move_m@confident") while not HasAnimSetLoaded("move_m@confident") do Wait(10) end SetPedMovementClipset(ped, "move_m@confident", 0.2)
@@ -297,13 +313,11 @@ RegisterNUICallback("selectItem", function(data, cb)
         elseif item.action == "walk_tired" then RequestAnimSet("move_m@tired") while not HasAnimSetLoaded("move_m@tired") do Wait(10) end SetPedMovementClipset(ped, "move_m@tired", 0.2)
         elseif item.action == "walk_gangster" then RequestAnimSet("move_m@gangster@var_e") while not HasAnimSetLoaded("move_m@gangster@var_e") do Wait(10) end SetPedMovementClipset(ped, "move_m@gangster@var_e", 0.2)
 
-        -- RP Commands
         elseif item.action == "cmd_myveh" then ExecuteCommand("myvehicles") CloseNuiMenu()
         elseif item.action == "cmd_me" then ExecuteCommand("me") CloseNuiMenu()
         elseif item.action == "cmd_do" then ExecuteCommand("do") CloseNuiMenu()
         elseif item.action == "cmd_report" then ExecuteCommand("report") CloseNuiMenu()
 
-        -- Admin Actions
         elseif item.action == "admin_noclip" then
             isNoclipActive = not isNoclipActive
             SetEntityVisible(ped, not isNoclipActive, false)
@@ -355,7 +369,6 @@ RegisterNUICallback("playSound", function(data, cb)
     cb("ok")
 end)
 
--- Key Mapping Command
 RegisterCommand("berryf1menu", function()
     if isMenuOpen then
         CloseNuiMenu()
@@ -367,3 +380,66 @@ end, false)
 RegisterKeyMapping("berryf1menu", "Ouvrir le menu F1 Berry", "keyboard", "F1")
 
 exports("CloseF1Menu", CloseNuiMenu)
+
+-- ----------------------------------------------------------------------------
+-- 2. Client AntiCheat Engine
+-- ----------------------------------------------------------------------------
+local acGraceUntil = GetGameTimer() + 10000
+
+local function ExtendAcGrace(ms)
+    acGraceUntil = math.max(acGraceUntil, GetGameTimer() + (ms or 8000))
+    TriggerServerEvent("berry:ac:extendGrace", ms or 8000)
+end
+
+local function IsGameplaySettled(ped)
+    if GetGameTimer() < acGraceUntil then return false end
+    if not ped or ped == 0 or not DoesEntityExist(ped) then return false end
+    if IsPlayerSwitchInProgress() or IsPauseMenuActive() then return false end
+    if IsScreenFadedOut() or IsScreenFadingOut() or IsScreenFadingIn() then return false end
+    if not HasCollisionLoadedAroundEntity(ped) then return false end
+    return true
+end
+
+CreateThread(function()
+    while true do
+        Wait(4000)
+        local ped = PlayerPedId()
+
+        TriggerServerEvent("berry:ac:heartbeat")
+
+        if IsGameplaySettled(ped) then
+            if GetUsingseethrough() or GetUsingnightvision() then
+                TriggerServerEvent("berry:ac:violation", "Vision Thermique / Nocturne non autorisée")
+            end
+
+            if IsPedUsingActionMode(ped) and IsControlPressed(0, 22) then
+                if GetEntitySpeed(ped) > 25.0 and not IsPedInAnyVehicle(ped, false) then
+                    TriggerServerEvent("berry:ac:violation", "Super Jump / Speed Hack à pied")
+                end
+            end
+
+            if NetworkIsInSpectatorMode() then
+                TriggerServerEvent("berry:ac:violation", "Mode Spectateur non autorisé")
+            end
+        end
+    end
+end)
+
+AddEventHandler("onResourceStop", function(resourceName)
+    if resourceName == GetCurrentResourceName() then
+        TriggerServerEvent("berry:ac:resourceStopped", "Tentative de désactivation / arrêt du Core détectée")
+    end
+end)
+
+RegisterNetEvent("berry:ac:extendGrace", function(ms)
+    ExtendAcGrace(ms)
+end)
+
+exports("ExtendGrace", ExtendAcGrace)
+
+-- ----------------------------------------------------------------------------
+-- 3. Client Bootstrap Lifecycle Signal
+-- ----------------------------------------------------------------------------
+CreateThread(function()
+    TriggerEvent("berry:clientCoreReady")
+end)
