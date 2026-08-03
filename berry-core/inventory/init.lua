@@ -251,16 +251,16 @@ if shared.target and GetResourceState('ox_target') ~= 'started' then
     shared.target = false
 end
 
-if lib.context == 'server' then
+if IsDuplicityVersion() then
     shared.ready = false
-    local ok, res = pcall(require, 'server')
+    local ok, res = pcall(lib.load, 'inventory.server')
     if not ok then
         print("[BERRY:INVENTORY] Error loading inventory server module: " .. tostring(res))
     end
-    return res
+    return
 end
 
-local ok, res = pcall(require, 'client')
+local ok, res = pcall(lib.load, 'inventory.client')
 if not ok then
     print("[BERRY:INVENTORY] Error loading inventory client module: " .. tostring(res))
 end
