@@ -76,7 +76,6 @@ files {
     'ui/index.html',
     'ui/style.css',
     'ui/app.js',
-    'ui/preview.html',
     'contextmenu/html/style.css',
     'contextmenu/html/script.js',
     'contextmenu/html/fonts/Inter.ttf',
