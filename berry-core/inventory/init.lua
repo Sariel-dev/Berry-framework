@@ -254,9 +254,13 @@ end
 if lib.context == 'server' then
     shared.ready = false
     local ok, res = pcall(require, 'inventory.server')
-    if not ok then require 'server' end
+    if not ok then
+        print("[BERRY:INVENTORY] Error loading inventory server module: " .. tostring(res))
+    end
     return res
 end
 
-local ok = pcall(require, 'inventory.client')
-if not ok then require 'client' end
+local ok, res = pcall(require, 'inventory.client')
+if not ok then
+    print("[BERRY:INVENTORY] Error loading inventory client module: " .. tostring(res))
+end

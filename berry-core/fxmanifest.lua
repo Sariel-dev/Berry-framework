@@ -100,6 +100,7 @@ files {
     'inventory/modules/craftmanager/config.lua',
     'inventory/modules/craftmanager/client.lua',
     'inventory/data/*.lua',
+    'data/*.lua',
     'inventory/config/*.lua'
 }
 
