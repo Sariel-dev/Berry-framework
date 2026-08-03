@@ -1,6 +1,9 @@
 if not lib then return end
 
-local CMConfig = require 'modules.craftmanager.config'
+local success, CMConfig = pcall(require, 'inventory.modules.craftmanager.config')
+if not success or not CMConfig then
+    _, CMConfig = pcall(require, 'modules.craftmanager.config')
+end
 
 if not CMConfig or not CMConfig.Enabled then
     return
