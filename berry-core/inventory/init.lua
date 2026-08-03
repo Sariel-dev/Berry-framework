@@ -253,7 +253,10 @@ end
 
 if lib.context == 'server' then
     shared.ready = false
-    return require 'server'
+    local ok, res = pcall(require, 'inventory.server')
+    if not ok then require 'server' end
+    return res
 end
 
-require 'client'
+local ok = pcall(require, 'inventory.client')
+if not ok then require 'client' end

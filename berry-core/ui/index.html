@@ -1,141 +1,146 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Berry Framework Single NUI Suite</title>
-    
-    <!-- FONTS & ICONS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&family=Poppins:wght@200;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
-    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
-    
-    <!-- BERRY MASTER STYLES -->
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Berry Framework Single NUI Suite</title>
 
-    <!-- BERRY CONTEXT MENU V6 STYLES -->
-    <link rel="stylesheet" href="../contextmenu/html/style.css">
+  <!-- FONTS & ICONS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700&family=Poppins:wght@200;400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 
-    <!-- BERRY INVENTORY COMPILED STYLES -->
-    <link rel="stylesheet" href="../inventory/web/build/assets/index-08478880.css">
+  <!-- BERRY MASTER STYLES -->
+  <link rel="stylesheet" href="style.css">
 
-    <!-- BERRY INVENTORY THEME SCRIPT -->
-    <script>
-      (() => {
-        const root = document.documentElement;
+  <!-- BERRY CONTEXT MENU V6 STYLES -->
+  <link rel="stylesheet" href="../contextmenu/html/style.css">
 
-        const clampChannel = (value) => {
-          const number = Number(value);
-          if (!Number.isFinite(number)) return null;
-          return Math.min(255, Math.max(0, Math.round(number)));
-        };
+  <!-- BERRY INVENTORY COMPILED STYLES -->
+  <link rel="stylesheet" href="../inventory/web/build/assets/index-08478880.css">
 
-        const normalizeColor = (value) => {
-          if (!value) return null;
+  <!-- BERRY INVENTORY THEME SCRIPT -->
+  <script>
+    (() => {
+      const root = document.documentElement;
 
-          if (typeof value === 'string') {
-            const hex = value.replace('#', '').trim();
-            if (!/^[0-9a-fA-F]{6}$/.test(hex)) return null;
+      const clampChannel = (value) => {
+        const number = Number(value);
+        if (!Number.isFinite(number)) return null;
+        return Math.min(255, Math.max(0, Math.round(number)));
+      };
 
-            return {
-              r: parseInt(hex.slice(0, 2), 16),
-              g: parseInt(hex.slice(2, 4), 16),
-              b: parseInt(hex.slice(4, 6), 16),
-            };
-          }
+      const normalizeColor = (value) => {
+        if (!value) return null;
 
-          const red = clampChannel(value.r ?? value.R ?? value[1]);
-          const green = clampChannel(value.g ?? value.G ?? value[2]);
-          const blue = clampChannel(value.b ?? value.B ?? value[3]);
+        if (typeof value === 'string') {
+          const hex = value.replace('#', '').trim();
+          if (!/^[0-9a-fA-F]{6}$/.test(hex)) return null;
 
-          if (red === null || green === null || blue === null) return null;
+          return {
+            r: parseInt(hex.slice(0, 2), 16),
+            g: parseInt(hex.slice(2, 4), 16),
+            b: parseInt(hex.slice(4, 6), 16),
+          };
+        }
 
-          return { r: red, g: green, b: blue };
-        };
+        const red = clampChannel(value.r ?? value.R ?? value[1]);
+        const green = clampChannel(value.g ?? value.G ?? value[2]);
+        const blue = clampChannel(value.b ?? value.B ?? value[3]);
 
-        const toHex = (color) =>
-          `#${[color.r, color.g, color.b]
-            .map((channel) => channel.toString(16).padStart(2, '0'))
-            .join('')
-            .toUpperCase()}`;
+        if (red === null || green === null || blue === null) return null;
 
-        const applyTheme = (payload) => {
-          const color = normalizeColor(payload?.color ?? payload?.primaryColor);
-          if (!color) return;
+        return { r: red, g: green, b: blue };
+      };
 
-          const hex = typeof payload?.hex === 'string' && /^#?[0-9a-fA-F]{6}$/.test(payload.hex)
-            ? (payload.hex.startsWith('#') ? payload.hex.toUpperCase() : `#${payload.hex.toUpperCase()}`)
-            : toHex(color);
+      const toHex = (color) =>
+        `#${[color.r, color.g, color.b]
+          .map((channel) => channel.toString(16).padStart(2, '0'))
+          .join('')
+          .toUpperCase()}`;
 
-          root.style.setProperty('--global-main-color', hex);
+      const applyTheme = (payload) => {
+        const color = normalizeColor(payload?.color ?? payload?.primaryColor);
+        if (!color) return;
 
-          for (let step = 10; step <= 90; step += 10) {
-            root.style.setProperty(
-              `--global-main-color-${step}`,
-              `rgba(${color.r}, ${color.g}, ${color.b}, ${step / 100})`
-            );
-          }
-        };
+        const hex = typeof payload?.hex === 'string' && /^#?[0-9a-fA-F]{6}$/.test(payload.hex)
+          ? (payload.hex.startsWith('#') ? payload.hex.toUpperCase() : `#${payload.hex.toUpperCase()}`)
+          : toHex(color);
 
-        window.addEventListener('message', (event) => {
-          const payload = event.data;
-          if (!payload || payload.action !== 'theme:apply') return;
-          applyTheme(payload);
-        });
+        root.style.setProperty('--global-main-color', hex);
 
-        applyTheme({ color: { r: 107, g: 33, b: 168 }, hex: '#6B21A8' });
-      })();
-    </script>
+        for (let step = 10; step <= 90; step += 10) {
+          root.style.setProperty(
+            `--global-main-color-${step}`,
+            `rgba(${color.r}, ${color.g}, ${color.b}, ${step / 100})`
+          );
+        }
+      };
+
+      window.addEventListener('message', (event) => {
+        const payload = event.data;
+        if (!payload || payload.action !== 'theme:apply') return;
+        applyTheme(payload);
+      });
+
+      applyTheme({ color: { r: 107, g: 33, b: 168 }, hex: '#6B21A8' });
+    })();
+  </script>
 </head>
+
 <body>
 
-    <!-- BERRY CONTEXT MENU ROOT -->
-    <div id="menu-root" class="is-hidden"></div>
+  <!-- BERRY CONTEXT MENU ROOT -->
+  <div id="menu-root" class="is-hidden"></div>
 
-    <!-- BERRY INVENTORY REACT ROOT MOUNT -->
-    <div id="root"></div>
+  <!-- BERRY INVENTORY REACT ROOT MOUNT -->
+  <div id="root"></div>
 
-    <!-- BERRY NOTIFICATIONS CONTAINER (Top-Right) -->
-    <div id="berry-notifications-container"></div>
+  <!-- BERRY NOTIFICATIONS CONTAINER (Top-Right) -->
+  <div id="berry-notifications-container"></div>
 
-    <!-- BERRY PROGRESS BAR CONTAINER (Bottom-Center) -->
-    <div id="berry-progressbar-container" class="hidden">
-        <div class="progressbar-wrapper">
-            <div class="progressbar-header">
-                <span id="progressbar-label">Action en cours...</span>
-                <span id="progressbar-percentage">0%</span>
-            </div>
-            <div class="progressbar-bar">
-                <div id="progressbar-fill"></div>
-            </div>
-        </div>
+  <!-- BERRY PROGRESS BAR CONTAINER (Bottom-Center) -->
+  <div id="berry-progressbar-container" class="hidden">
+    <div class="progressbar-wrapper">
+      <div class="progressbar-header">
+        <span id="progressbar-label">Action en cours...</span>
+        <span id="progressbar-percentage">0%</span>
+      </div>
+      <div class="progressbar-bar">
+        <div id="progressbar-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- F1 MENU CONTAINER -->
+  <div id="f1-container" class="hidden">
+    <div class="menu-header">
+      <h1 id="menu-title">BERRY</h1>
     </div>
 
-    <!-- F1 MENU CONTAINER -->
-    <div id="f1-container" class="hidden">
-        <div class="menu-header">
-            <h1 id="menu-title">BERRY</h1>
-        </div>
-
-        <div class="menu-subtitle-bar">
-            <span id="menu-subtitle">Actions</span>
-            <span id="menu-counter">1/5</span>
-        </div>
-
-        <div id="menu-items-list" class="menu-items-container">
-            <!-- Dynamically populated buttons -->
-        </div>
+    <div class="menu-subtitle-bar">
+      <span id="menu-subtitle">Actions</span>
+      <span id="menu-counter">1/5</span>
     </div>
 
-    <!-- BERRY MASTER NUI ENGINE -->
-    <script src="app.js"></script>
-    
-    <!-- BERRY CONTEXT MENU ENGINE SCRIPT -->
-    <script src="../contextmenu/html/script.js"></script>
+    <div id="menu-items-list" class="menu-items-container">
+      <!-- Dynamically populated buttons -->
+    </div>
+  </div>
 
-    <!-- BERRY INVENTORY REACT BUNDLE -->
-    <script type="module" crossorigin src="../inventory/web/build/assets/index-dcd5394e.js"></script>
+  <!-- BERRY MASTER NUI ENGINE -->
+  <script src="app.js"></script>
+
+  <!-- BERRY CONTEXT MENU ENGINE SCRIPT -->
+  <script src="../contextmenu/html/script.js"></script>
+
+  <!-- BERRY INVENTORY REACT BUNDLE -->
+  <script type="module" crossorigin src="../inventory/web/build/assets/index-dcd5394e.js"></script>
 </body>
+
 </html>

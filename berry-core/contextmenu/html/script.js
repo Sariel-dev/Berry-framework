@@ -11,7 +11,7 @@ const hideMenu = () => {
   openPanels = [];
 };
 
-const closeMenu = () => {
+const closeContextMenu = () => {
   hideMenu();
 
   fetch(`https://${GetParentResourceName()}/contextmenu:close`, {
@@ -187,6 +187,6 @@ window.addEventListener("message", (event) => {
 
 window.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
-    closeMenu();
+    closeContextMenu();
   }
 });

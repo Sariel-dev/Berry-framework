@@ -752,12 +752,36 @@ local function GetChunkKey(x, y)
 end
 
 function Berry.Markers.Add(id, coords, options)
+    if not coords then return end
     options = options or {}
+
+    local vec
+    if type(coords) == "vector3" then
+        vec = coords
+    elseif type(coords) == "table" then
+        vec = vector3(
+            tonumber(coords.x or coords[1]) or 0.0,
+            tonumber(coords.y or coords[2]) or 0.0,
+            tonumber(coords.z or coords[3]) or 0.0
+        )
+    else
+        return
+    end
+
+    local sizeVec = options.size or vector3(1.0, 1.0, 1.0)
+    if type(sizeVec) == "table" then
+        sizeVec = vector3(
+            tonumber(sizeVec.x or sizeVec[1]) or 1.0,
+            tonumber(sizeVec.y or sizeVec[2]) or 1.0,
+            tonumber(sizeVec.z or sizeVec[3]) or 1.0
+        )
+    end
+
     local markerData = {
         id = id,
-        coords = vector3(coords.x, coords.y, coords.z),
+        coords = vec,
         type = options.type or 1,
-        size = options.size or vector3(1.0, 1.0, 1.0),
+        size = sizeVec,
         color = options.color or { r = 192, g = 132, b = 252, a = 180 },
         drawDistance = options.drawDistance or 15.0,
         interactDistance = options.interactDistance or 1.5,
@@ -767,7 +791,7 @@ function Berry.Markers.Add(id, coords, options)
 
     registeredMarkers[id] = markerData
 
-    local chunkKey = GetChunkKey(coords.x, coords.y)
+    local chunkKey = GetChunkKey(vec.x, vec.y)
     spatialChunks[chunkKey] = spatialChunks[chunkKey] or {}
     table.insert(spatialChunks[chunkKey], markerData)
 end

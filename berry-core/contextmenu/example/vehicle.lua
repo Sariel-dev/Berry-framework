@@ -1,4 +1,4 @@
-local ECM = exports["ContextMenuV6"]
+local ECM = exports[GetCurrentResourceName()]
 
 ECM:Register(function(screenPosition, hitSomething, worldPosition, hitEntity, normalDirection)
     if not DoesEntityExist(hitEntity) or not IsEntityAVehicle(hitEntity) then

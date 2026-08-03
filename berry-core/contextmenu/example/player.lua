@@ -1,4 +1,4 @@
-local ECM = exports["ContextMenuV6"]
+local ECM = exports[GetCurrentResourceName()]
 
 ECM:Register(function(screenPosition, hitSomething, worldPosition, hitEntity, normalDirection)
     local ped = PlayerPedId()
