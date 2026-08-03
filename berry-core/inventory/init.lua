@@ -251,16 +251,41 @@ if shared.target and GetResourceState('ox_target') ~= 'started' then
     shared.target = false
 end
 
+-- Patch require to resolve sub-modules inside inventory/ folder.
+-- When ox_lib require is called with e.g. 'modules.bridge.server' it looks at
+-- @berry-core/modules/bridge/server.lua — but in the single-resource layout these
+-- files live at @berry-core/inventory/modules/bridge/server.lua.
+-- This wrapper retries with the 'inventory.' prefix if the plain require fails.
+local _orig_require = require
+local function patchedRequire(modname)
+    -- Already prefixed or absolute — pass through
+    if modname:match('^inventory%.') or modname:match('^@') then
+        return _orig_require(modname)
+    end
+    -- Try the plain module first (might be preloaded or a real root module)
+    local ok, result = pcall(_orig_require, modname)
+    if ok then return result end
+    -- Retry with 'inventory.' prefix
+    local ok2, result2 = pcall(_orig_require, 'inventory.' .. modname)
+    if ok2 then return result2 end
+    -- Re-throw the original error so the stack trace is useful
+    error(result, 2)
+end
+
 if IsDuplicityVersion() then
     shared.ready = false
+    _G.require = patchedRequire
     local ok, res = pcall(lib.load, 'inventory.server')
+    _G.require = _orig_require
     if not ok then
         print("[BERRY:INVENTORY] Error loading inventory server module: " .. tostring(res))
     end
     return
 end
 
+_G.require = patchedRequire
 local ok, res = pcall(lib.load, 'inventory.client')
+_G.require = _orig_require
 if not ok then
     print("[BERRY:INVENTORY] Error loading inventory client module: " .. tostring(res))
 end
