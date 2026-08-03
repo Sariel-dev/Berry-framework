@@ -682,10 +682,11 @@ local function GetPlayerAcState(src)
     src = tonumber(src)
     if not src then return nil end
     playerAcState[src] = playerAcState[src] or {
-        graceUntil = GetGameTimer() + 12000,
+        graceUntil = GetGameTimer() + 90000,
         evidence = 0,
         lastCoords = nil,
-        lastHeartbeat = GetGameTimer()
+        lastHeartbeat = GetGameTimer(),
+        hasStartedHeartbeat = false
     }
     return playerAcState[src]
 end
@@ -693,7 +694,7 @@ end
 function Berry.AntiCheat.ExtendGrace(source, durationMs)
     local state = GetPlayerAcState(source)
     if state then
-        state.graceUntil = math.max(state.graceUntil, GetGameTimer() + (durationMs or 8000))
+        state.graceUntil = math.max(state.graceUntil, GetGameTimer() + (durationMs or 15000))
         state.evidence = 0
         state.lastCoords = nil
         state.lastHeartbeat = GetGameTimer()
@@ -704,7 +705,7 @@ function Berry.AntiCheat.BanPlayer(source, reason)
     source = tonumber(source)
     if not source or source <= 0 then return end
 
-    if Berry.Permissions.Has(source, "admin") or Berry.Permissions.Has(source, "superadmin") then
+    if Berry.Permissions.Has(source, "admin") or Berry.Permissions.Has(source, "superadmin") or Berry.Permissions.Has(source, "fondateur") then
         Berry.Logger.Warn("ANTICHEAT", "Bypass Admin pour %d (%s)", source, reason)
         return
     end
@@ -737,12 +738,16 @@ RegisterNetEvent("berry:ac:heartbeat", function()
     local st = GetPlayerAcState(src)
     if st then
         st.lastHeartbeat = GetGameTimer()
+        st.hasStartedHeartbeat = true
     end
 end)
 
 RegisterNetEvent("berry:ac:resourceStopped", function(reason)
     local src = source
-    Berry.AntiCheat.BanPlayer(src, reason or "Tentative d'arrêt du Core détectée")
+    local st = GetPlayerAcState(src)
+    if st and st.hasStartedHeartbeat then
+        Berry.AntiCheat.BanPlayer(src, reason or "Tentative d'arrêt du Core détectée")
+    end
 end)
 
 RegisterNetEvent("berry:ac:violation", function(reason)
@@ -771,8 +776,8 @@ CreateThread(function()
             local src = tonumber(srcStr)
             if src and src > 0 then
                 local st = GetPlayerAcState(src)
-                if st and now > st.graceUntil then
-                    if (now - st.lastHeartbeat) > 15000 then
+                if st and st.hasStartedHeartbeat and now > st.graceUntil then
+                    if (now - st.lastHeartbeat) > 25000 then
                         Berry.AntiCheat.BanPlayer(src, "Blocage du Core / Désactivation du script client (Heartbeat timeout)")
                     end
                 end
